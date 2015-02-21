@@ -36,4 +36,27 @@
 	       (push (line-to-config line) configs))))
       configs)))
 
+(defun split-into-tokens (in)
+  (let* ((tag-sets '((#\< #\%)
+		     (#\% #\>)))
+	 (tag-heads (mapcar #'car tag-sets))
+	 (last-index (1- (length in))))
+    (labels ((tagp (in tag-head-index)
+	       (and tag-head-index
+		    (< tag-head-index last-index)
+		    (char= (elt in (1+ tag-head-index)) (cadr (assoc (elt in tag-head-index) tag-sets)))))
+	     (tag-head-pos (in head-index)
+	       (position-if #'(lambda (chr)
+				(member chr tag-heads)) in :start head-index))
+	     (tag-pos (in head-index)
+	       (do ((tag-head-index (tag-head-pos in head-index) (tag-head-pos in (1+ tag-head-index))))
+		   ((or (and tag-head-index (tagp in tag-head-index)) (null tag-head-index))
+		    tag-head-index)))
+	     (read-token (in head-index tokens)
+	       (let* ((tag-head-index (tag-pos in head-index))
+		      (tag (and (tagp in tag-head-index) (subseq in tag-head-index (+ tag-head-index 2)))))
+		 (if tag
+		     (read-token in (+ tag-head-index 2)  (cons tag (cons (substring in head-index tag-head-index) tokens)))
+		   (cons (substring in head-index) tokens)))))
+      (nreverse (read-token in 0 '())))))
 
