@@ -60,3 +60,21 @@
 		   (cons (substring in head-index) tokens)))))
       (nreverse (read-token in 0 '())))))
 
+;;
+;;another version of split-into-tokens using regular expression
+;;
+;;(defun split-into-tokens (in)
+;;  (let ((tag-pat "\\(<%\\|%>\\)"))
+;;    (do* ((tag-head-index (string-match tag-pat in) (string-match tag-pat in tag-tail-index))
+;;	  (last-tag-tail-index 0 tag-tail-index)
+;;	  (tag-tail-index (match-end 0) (match-end 0))
+;;	  (tokens (if tag-head-index
+;;		      (list (substring in tag-head-index tag-tail-index)
+;;			    (substring in 0 tag-head-index))
+;;		    (list (substring in 0 tag-head-index)))
+;;		  (if tag-head-index
+;;		      (cons (substring in tag-head-index tag-tail-index)
+;;			    (cons (substring in last-tag-tail-index tag-head-index) tokens))
+;;		    (cons (substring in last-tag-tail-index) tokens))))
+;;	((null tag-head-index) (nreverse tokens)))))
+
