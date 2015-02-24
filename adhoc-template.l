@@ -4,6 +4,8 @@
 (in-package "adhoc-template")
 (use-package '("user" "editor" "misc-utils"))
 
+(export '(convert read-configs parse format-tree *adhoc-template-formatters*))
+
 (defun read-config-block (block-head in)
   (labels ((collect-lines (in)
 	     (let ((lines '()))
