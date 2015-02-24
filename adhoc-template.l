@@ -4,7 +4,11 @@
 (in-package "adhoc-template")
 (use-package '("user" "editor" "misc-utils"))
 
-(export '(convert read-configs parse format-tree *adhoc-template-formatters*))
+(export '(read-configs
+	  parse
+	  format-tree
+	  convert
+	  *adhoc-template-formatters*))
 
 (defun read-config-block (block-head in)
   (labels ((collect-lines (in)
@@ -60,7 +64,8 @@
 	       (let* ((tag-head-index (tag-pos in head-index))
 		      (tag (and (tagp in tag-head-index) (subseq in tag-head-index (+ tag-head-index 2)))))
 		 (if tag
-		     (read-token in (+ tag-head-index 2)  (cons tag (cons (substring in head-index tag-head-index) tokens)))
+		     (read-token in (+ tag-head-index 2)
+				 (cons tag (cons (substring in head-index tag-head-index) tokens)))
 		   (cons (substring in head-index) tokens)))))
       (nreverse (read-token in 0 '())))))
 
