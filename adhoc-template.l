@@ -113,12 +113,12 @@
 	(cdr fn-pair)
       'default-eval-variable)))
 
-(defun function-id-and-var (tag-content)
-  (values-list (re-split-string (car tag-content) "[ \t]+")))
+(defun function-id-and-var (tag)
+  (values-list (re-split-string (car tag) "[ \t]+")))
 
-(defun eval-tag (tag-content configs)
+(defun eval-tag (tag configs)
   (multiple-value-bind (function-id var)
-      (function-id-and-var tag-content)
+      (function-id-and-var tag)
     (funcall (choose-formatter function-id) var configs)))
 
 (defun format-tree (tree configs)
