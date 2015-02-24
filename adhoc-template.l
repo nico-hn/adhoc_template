@@ -1,3 +1,5 @@
+(require "misc-utils")
+
 (defpackage "adhoc-template")
 (in-package "adhoc-template")
 (use-package '("user" "editor" "misc-utils"))
