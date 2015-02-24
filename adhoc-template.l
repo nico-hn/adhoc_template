@@ -101,3 +101,32 @@
 		      (read-string-part (cons embedded-part parsed-list) rest-tokens))))))
       (read-string-part '() (split-into-tokens in)))))
 
+(defun default-eval-variable (var configs)
+  (let ((val (assoc var configs :test 'equal)))
+    (or (and val (cdr val)) var)))
+
+(defvar *adhoc-template-formatters* '(("=" . default-eval-variable)))
+
+(defun choose-formatter (function-id)
+  (let ((fn-pair (assoc function-id *adhoc-template-formatters* :test 'string=)))
+    (if fn-pair
+	(cdr fn-pair)
+      'default-eval-variable)))
+
+(defun function-id-and-var (tag-content)
+  (values-list (re-split-string (car tag-content) "[ \t]+")))
+
+(defun eval-tag (tag-content configs)
+  (multiple-value-bind (function-id var)
+      (function-id-and-var tag-content)
+    (funcall (choose-formatter function-id) var configs)))
+
+(defun format-tree (tree configs)
+  (cond ((null tree) nil)
+	((consp (car tree))
+	 (format-tree (cdr tree) configs)
+	 (princ (eval-tag (car tree) configs)))
+	((stringp (car tree))
+	 (format-tree (cdr tree) configs)
+	 (princ (car tree)))))
+
