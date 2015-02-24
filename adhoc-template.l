@@ -130,3 +130,7 @@
 	 (format-tree (cdr tree) configs)
 	 (princ (car tree)))))
 
+(defun convert (template-data config-data)
+  (let ((configs (read-configs config-data)))
+    (format-tree (parse template-data) configs)))
+
