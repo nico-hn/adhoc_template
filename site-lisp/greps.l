@@ -34,4 +34,5 @@
 		     (insert line "\n"))))))
       (with-output-to-temp-buffer ("*greps-result*")
 	(insert "Result of greps for " grep-target-name ":\n")
-	(mapc #'grep-with-config configs)))))
+	(mapc #'grep-with-config configs))
+      (goto-char (point-min)))))
