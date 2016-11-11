@@ -28,7 +28,7 @@
     (labels ((grep-with-config (config)
 	       (let ((label (first config))
 		     (regexp (second config)))
-		 (insert label "\n ----------\n")
+		 (insert "\n#" label ": " regexp " ----------\n")
 		 (each-line (line lines)
 		   (when (string-match regexp line)
 		     (insert line "\n"))))))
