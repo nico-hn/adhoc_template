@@ -5,7 +5,8 @@
 (export '(emptyp
 	  each-line
 	  join-string
-	  re-split-string))
+	  re-split-string
+	  integer-to-string))
 
 (defun emptyp (arg)
   (and (or (stringp arg) (listp arg)) (zerop (length arg))))
@@ -49,3 +50,5 @@
 				     (string= field "")) result)))
        (reverse result))))
 
+(defun integer-to-string (int)
+  (format nil "~D" int))
