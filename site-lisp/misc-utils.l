@@ -60,5 +60,5 @@
 
 (defun file-to-string (file-path)
   (with-open-file (stream file-path)
-    (let ((file-content (make-vector (file-length stream) :element-type 'character :fill-pointer 0)))
+    (let ((file-content (make-string (file-length stream))))
       (read-into file-content stream))))
