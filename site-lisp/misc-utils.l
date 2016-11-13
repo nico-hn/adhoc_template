@@ -3,6 +3,7 @@
 (use-package '("user" "editor" "si"))
 
 (export '(emptyp
+	  make-string
 	  each-line
 	  join-string
 	  re-split-string
@@ -11,6 +12,9 @@
 
 (defun emptyp (arg)
   (and (or (stringp arg) (listp arg)) (zerop (length arg))))
+
+(defun make-string (string-length)
+  (make-vector string-length :element-type 'character :fill-pointer 0))
 
 (defmacro each-line ((line &optional in) &rest body)
   (let ((lines (gensym))
