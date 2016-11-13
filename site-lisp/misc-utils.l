@@ -6,7 +6,8 @@
 	  each-line
 	  join-string
 	  re-split-string
-	  integer-to-string))
+	  integer-to-string
+	  file-to-string))
 
 (defun emptyp (arg)
   (and (or (stringp arg) (listp arg)) (zerop (length arg))))
@@ -52,3 +53,8 @@
 
 (defun integer-to-string (int)
   (format nil "~D" int))
+
+(defun file-to-string (file-path)
+  (with-open-file (stream file-path)
+    (let ((file-content (make-vector (file-length stream) :element-type 'character :fill-pointer 0)))
+      (read-into file-content stream))))
