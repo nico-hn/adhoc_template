@@ -8,7 +8,8 @@
 	  join-string
 	  re-split-string
 	  integer-to-string
-	  file-to-string))
+	  file-to-string
+	  read-content-of-files-in-directory))
 
 (defun emptyp (arg)
   (and (or (stringp arg) (listp arg)) (zerop (length arg))))
@@ -62,3 +63,16 @@
   (with-open-file (stream file-path)
     (let ((file-content (make-string (file-length stream))))
       (read-into file-content stream))))
+
+(defun read-content-of-files-in-directory (directory-path &optional (file-pat nil))
+  (let ((files (directory directory-path)))
+    (if file-pat
+	(delete-if-not #'(lambda (file)
+			   (string-match file-pat file))
+		       files))
+    (reduce #'(lambda (contents file)
+		(acons file
+		       (file-to-string (merge-pathnames file directory-path))
+		       contents))
+	    files
+	    :initial-value '())))
