@@ -65,14 +65,16 @@
       (read-into file-content stream))))
 
 (defun read-content-of-files-in-directory (directory-path &optional (file-pat nil))
-  (let ((files (directory directory-path)))
-    (if file-pat
-	(delete-if-not #'(lambda (file)
-			   (string-match file-pat file))
-		       files))
-    (reduce #'(lambda (contents file)
-		(acons file
-		       (file-to-string (merge-pathnames file directory-path))
-		       contents))
-	    files
-	    :initial-value '())))
+  (labels ((keep-matching-files (files)
+	     (if file-pat
+		 (delete-if-not #'(lambda (file)
+				    (string-match file-pat file))
+				files)
+	       files))
+	   (file-content (file)
+	     (file-to-string (merge-pathnames file directory-path))))
+    (let ((files (keep-matching-files (directory directory-path))))
+      (reduce #'(lambda (contents file)
+		  (acons file (file-content file) contents))
+	      files
+	      :initial-value '()))))
