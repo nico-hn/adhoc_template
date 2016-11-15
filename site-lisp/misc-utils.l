@@ -62,7 +62,9 @@
 (defun file-to-string (file-path)
   (with-open-file (stream file-path)
     (let ((file-content (make-string (file-length stream))))
-      (read-into file-content stream))))
+      (read-into file-content stream)
+      (convert-encoding-to-internal (detect-char-encoding file-content)
+				    file-content))))
 
 (defun read-content-of-files-in-directory (directory-path &optional (file-pat nil))
   (labels ((keep-matching-files (files)
