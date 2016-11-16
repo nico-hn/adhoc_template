@@ -140,6 +140,10 @@
 	 (princ (car tree)))))
 
 (defun convert (template-data config-data)
-  (let ((configs (read-configs config-data)))
-    (format-tree (parse template-data) configs)))
+  (labels ((prepare-config-stream (config-data)
+	     (if (stringp config-data)
+		 (make-string-input-stream config-data)
+	       config-data)))
+    (let ((configs (read-configs (prepare-config-stream config-data))))
+      (format-tree (parse template-data) configs))))
 
