@@ -63,7 +63,8 @@
   (with-open-file (stream file-path)
     (let ((file-content (make-string (file-length stream))))
       (read-into file-content stream)
-      (convert-encoding-to-internal (detect-char-encoding file-content)
+      (convert-encoding-to-internal
+       (or (detect-char-encoding file-content) *encoding-utf8n*)
 				    file-content))))
 
 (defun read-content-of-files-in-directory (directory-path &optional (file-pat nil))
