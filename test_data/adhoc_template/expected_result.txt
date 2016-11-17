@@ -1,0 +1,11 @@
+Template file for adhoc_template
+
+* 1st item
+* 2nd  item
+
+The following is a paragraph that is inserted from a config file:
+
+
+This is a paragraph defined in config.txt
+The second line.
+
