@@ -138,7 +138,7 @@
 (defun format-tree (tree configs &optional cur-str)
   (let ((cur-str (or cur-str "")))
     (cond ((null tree)
-	   (princ cur-str))
+	   cur-str)
 	  ((consp (car tree))
 	   (format-tree (cdr tree) configs
 			(concat (eval-tag (car tree) configs) cur-str)))
