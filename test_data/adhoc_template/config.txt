@@ -1,0 +1,7 @@
+first: 1st
+second: 2nd
+
+//@paragraph
+
+This is a paragraph defined in config.txt
+The second line.

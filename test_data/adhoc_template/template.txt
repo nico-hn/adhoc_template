@@ -1,0 +1,9 @@
+Template file for adhoc_template
+
+* <%= first %> item
+* <%= second %>  item
+
+The following is a paragraph that is inserted from a config file:
+
+<%= paragraph %>
+
