@@ -135,14 +135,16 @@
       (function-id-and-var tag)
     (funcall (choose-formatter function-id) var configs)))
 
-(defun format-tree (tree configs)
-  (cond ((null tree) nil)
-	((consp (car tree))
-	 (format-tree (cdr tree) configs)
-	 (princ (eval-tag (car tree) configs)))
-	((stringp (car tree))
-	 (format-tree (cdr tree) configs)
-	 (princ (car tree)))))
+(defun format-tree (tree configs &optional cur-str)
+  (let ((cur-str (or cur-str "")))
+    (cond ((null tree)
+	   (princ cur-str))
+	  ((consp (car tree))
+	   (format-tree (cdr tree) configs
+			(concat (eval-tag (car tree) configs) cur-str)))
+	  ((stringp (car tree))
+	   (format-tree (cdr tree) configs
+			(concat (car tree) cur-str))))))
 
 (defun convert (template-data config-data)
   (let ((configs (read-configs config-data)))
