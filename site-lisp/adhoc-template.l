@@ -27,8 +27,13 @@
 (defun read-configs (in)
   (labels ((line-to-config (line)
 	     (let ((lst (re-split-string line ":[ \t]?" t :number-of-fields 2)))
-	       (cons (car lst) (cadr lst)))))
+	       (cons (car lst) (cadr lst))))
+	   (prepare-config-stream (config-data)
+	     (if (stringp config-data)
+		 (make-string-input-stream config-data)
+	       config-data)))
     (let ((configs '())
+	  (in (prepare-config-stream in))
 	  config
 	  block-head)
       (each-line (line in)
@@ -140,10 +145,6 @@
 	 (princ (car tree)))))
 
 (defun convert (template-data config-data)
-  (labels ((prepare-config-stream (config-data)
-	     (if (stringp config-data)
-		 (make-string-input-stream config-data)
-	       config-data)))
-    (let ((configs (read-configs (prepare-config-stream config-data))))
-      (format-tree (parse template-data) configs))))
+  (let ((configs (read-configs config-data)))
+      (format-tree (parse template-data) configs)))
 
