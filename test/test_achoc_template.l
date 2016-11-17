@@ -5,6 +5,7 @@
   (let ((configs (misc-utils:file-to-string "../test_data/adhoc_template/config.txt"))
 	(template (misc-utils:file-to-string "../test_data/adhoc_template/template.txt")))
     (with-output-to-temp-buffer ("*tmp*")
-      (insert (adhoc-template:convert template configs)))))
+      (princ (adhoc-template:convert template configs)))))
 
 (test-adhoc-template-convert)
+
