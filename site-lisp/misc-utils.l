@@ -96,12 +96,11 @@
       (read-lines lines))))
 
 (defun tsv-to-alists (tsv)
-  (with-input-from (lines tsv)
-    (let ((field-names (split-string (read-line lines nil) #\tab t)))
-      (do ((line (read-line lines nil) (read-line lines nil))
-	   (alists '() (cons (mapcar #'cons field-names (split-string line #\tab t))
-			     alists)))
-	  ((not (stringp line)) (reverse alists))))))
+  (let* ((lines (read-lines-from tsv))
+	 (field-names (split-string (car lines) #\tab t)))
+    (mapcar #'(lambda (line)
+		(mapcar #'cons field-names (split-string line #\tab t)))
+	    (cdr lines))))
 
 (defun read-content-of-files-in-directory (directory-path &optional (file-pat nil))
   (labels ((keep-matching-files (files)
