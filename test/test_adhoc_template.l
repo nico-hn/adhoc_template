@@ -21,6 +21,16 @@ one\ttwo\tthree
     (unless (equalp alists expected)
       (message-box (concat "test for tsv-to-alists failed:\n" alists)))))
 
+(defun test-misc-utils-read-lines-from ()
+  (let ((lines (read-lines-from "first\tsecond\tthird
+1\t2\t3
+un\tdeux\ttrois
+one\ttwo\tthree
+"))
+	(expected '("first\tsecond\tthird" "1\t2\t3" "un\tdeux\ttrois" "one\ttwo\tthree")))
+    (unless (equalp lines expected)
+      (message-box (concat "test for read-lines-from failed:\n" lines)))))
 
 (test-adhoc-template-convert)
 (test-misc-utils-tsv-to-alists)
+(test-misc-utils-read-lines-from)
