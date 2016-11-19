@@ -92,14 +92,8 @@
 	     (do ((line (read-line in nil) (read-line in nil))
 		  (lines '() (cons line lines)))
 		 ((null line) (reverse lines)))))
-    (cond
-     ((stringp input)
-      (with-input-from-string (in input)
-	(read-lines in)))
-     ((bufferp input)
-      (with-input-from-buffer (input)
-	(let ((in *standard-input*))
-	  (read-lines in)))))))
+    (with-input-from (lines input)
+      (read-lines lines))))
 
 (defun tsv-to-alists (tsv)
   (let* ((lines (make-string-input-stream tsv))
