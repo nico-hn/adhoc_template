@@ -9,6 +9,7 @@
 	  re-split-string
 	  integer-to-string
 	  file-to-string
+	  read-lines-from
 	  tsv-to-alists
 	  read-content-of-files-in-directory))
 
@@ -67,6 +68,20 @@
       (convert-encoding-to-internal
        (or (detect-char-encoding file-content) *encoding-utf8n*)
 				    file-content))))
+
+(defun read-lines-from (input)
+  (labels ((read-lines (in)
+	     (do ((line (read-line in nil) (read-line in nil))
+		  (lines '() (cons line lines)))
+		 ((null line) (reverse lines)))))
+    (cond
+     ((stringp input)
+      (with-input-from-string (in input)
+	(read-lines in)))
+     ((bufferp input)
+      (with-input-from-buffer (input)
+	(let ((in *standard-input*))
+	  (read-lines in)))))))
 
 (defun tsv-to-alists (tsv)
   (let* ((lines (make-string-input-stream tsv))
