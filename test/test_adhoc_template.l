@@ -8,5 +8,19 @@
     (unless (string= expected-result (adhoc-template:convert template configs))
       (message-box (concat "NOT EXPECTED RESULT: " (adhoc-template:convert template configs))))))
 
-(test-adhoc-template-convert)
+(defun test-misc-utils-tsv-to-alists ()
+  (let* ((tsv "first\tsecond\tthird
+1\t2\t3
+un\tdeux\ttrois
+one\ttwo\tthree
+")
+	 (expected '((("first" . "1") ("second" . "2") ("third" . "3"))
+		     (("first" . "un") ("second" . "deux") ("third" . "trois"))
+		     (("first" . "one") ("second" . "two") ("third" . "three"))))
+	 (alists (tsv-to-alists tsv)))
+    (unless (equalp alists expected)
+      (message-box (concat "test for tsv-to-alists failed:\n" alists)))))
 
+
+(test-adhoc-template-convert)
+(test-misc-utils-tsv-to-alists)
