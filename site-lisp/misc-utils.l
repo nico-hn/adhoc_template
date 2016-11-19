@@ -9,6 +9,7 @@
 	  re-split-string
 	  integer-to-string
 	  file-to-string
+	  with-input-from
 	  read-lines-from
 	  tsv-to-alists
 	  read-content-of-files-in-directory))
@@ -34,6 +35,23 @@
 	 ,@body))))
 
 (setf (get 'each-line 'lisp-indent-hook) 'defun)
+
+(defmacro with-input-from ((lines &optional in) &rest body)
+  (let ((input (gensym)))
+    (cond ((null in)
+	   `(with-input-from-buffer ((selected-buffer))
+	      (let ((,lines *standard-input*))
+		,@body)))
+	  (`(stringp ,in)
+	   `(with-input-from-string (,lines ,in)
+	      ,@body))
+	  (`(bufferp ,in)
+	   `(with-input-from-buffer (,in)
+	      (let ((,lines *standard-input*)
+		    (,input ,in))
+		,@body))))))
+
+(setf (get 'with-input-from 'lisp-indent-hook) 'defun)
 
 (defun join-string (strings &optional (separator ""))
   (let ((strings-with-separator (reduce #'(lambda (m str)
