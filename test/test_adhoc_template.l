@@ -31,6 +31,14 @@ one\ttwo\tthree
     (unless (equalp lines expected)
       (message-box (concat "test for read-lines-from failed:\n" lines)))))
 
+(defun test-adhoc-template-convert-tsv ()
+  (let ((tsv (misc-utils:file-to-string "../test_data/adhoc_template/tsv.txt"))
+	(template (misc-utils:file-to-string "../test_data/adhoc_template/template_for_tsv.txt"))
+	(expected-result (misc-utils:file-to-string "../test_data/adhoc_template/expected_result_for_tsv.txt")))
+    (unless (string= expected-result (adhoc-template:convert-tsv template tsv))
+      (message-box (concat "NOT EXPECTED RESULT: " (adhoc-template:convert-tsv template tsv))))))
+
 (test-adhoc-template-convert)
 (test-misc-utils-tsv-to-alists)
 (test-misc-utils-read-lines-from)
+(test-adhoc-template-convert-tsv)
