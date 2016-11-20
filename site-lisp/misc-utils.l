@@ -43,7 +43,6 @@
 	      (let ((,lines *standard-input*))
 		,@body)))
 	  ((stringp in)
-	   (message-box in)
 	   `(with-input-from-string (,lines ,in)
 	      ,@body))
 	  (`(bufferp ,in)
