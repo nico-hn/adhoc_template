@@ -1,0 +1,3 @@
+
+#language: <%= lang %>
+<%= first %>, <%= second %>, <%= third %>
