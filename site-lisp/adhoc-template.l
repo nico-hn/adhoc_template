@@ -8,6 +8,7 @@
 	  parse
 	  format-tree
 	  convert
+	  convert-tsv
 	  *adhoc-template-formatters*))
 
 (defun read-config-block (block-head in)
@@ -150,3 +151,9 @@
   (let ((configs (read-configs config-data)))
       (format-tree (parse template-data) configs)))
 
+(defun convert-tsv (template-data tsv-data)
+  (let ((tsv-records (tsv-to-alists tsv-data))
+	(template (parse template-data)))
+    (join-string (mapcar #'(lambda (tsv-record)
+			     (format-tree template tsv-record))
+			 tsv-records))))

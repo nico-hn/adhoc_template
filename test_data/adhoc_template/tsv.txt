@@ -1,0 +1,4 @@
+lang	first	second	third
+French	un	deux	trois
+English	one	two	three
+Spanish	uno	dos	tres
