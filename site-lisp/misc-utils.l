@@ -12,6 +12,8 @@
 	  with-input-from
 	  read-lines-from
 	  tsv-to-alists
+	  html-encode
+	  html-decode
 	  read-content-of-files-in-directory))
 
 (defun emptyp (arg)
@@ -101,6 +103,34 @@
     (mapcar #'(lambda (line)
 		(mapcar #'cons field-names (split-string line #\tab t)))
 	    (cdr lines))))
+
+(defun convert-match (str convert-table from-re)
+  (labels ((convert-table (chr)
+	       (cdr (assoc chr convert-table :test 'equal))))
+      (do ((result "" (concat result
+			      (substring str prev-pos (match-beginning 0))
+			      (convert-table (match-string 0))))
+	   (prev-pos 0 (match-end 0)))
+	  ((null (string-match from-re str prev-pos))
+	   (concat result (substring str prev-pos))))))
+
+(defun html-encode (str)
+  (let ((char-entity-table '(("&" . "&amp;")
+			     (">" . "&gt;")
+			     ("<" . "&lt;")
+			     ("\"" . "&quot;")
+			     ("'" . "&apos;")))
+	(char-re "\\([&<>\"']\\)"))
+    (convert-match str char-entity-table char-re)))
+
+(defun html-decode (str)
+  (let ((entity-char-table '(("&amp;" . "&")
+			     ("&gt;" . ">")
+			     ("&lt;" . "<")
+			     ("&quot;" . "\"")
+			     ("&apos;" . "'")))
+	(entity-re "&\\(amp\\|gt\\|lt\\|quot\\|apos\\);"))
+    (convert-match str entity-char-table entity-re)))
 
 (defun read-content-of-files-in-directory (directory-path &optional (file-pat nil))
   (labels ((keep-matching-files (files)

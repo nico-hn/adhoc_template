@@ -120,7 +120,12 @@
   (let ((val (assoc var configs :test 'equal)))
     (or (and val (cdr val)) var)))
 
-(defvar *adhoc-template-formatters* '(("=" . default-eval-variable)))
+(defun eval-variable-with-html-encode (var configs)
+  (let ((val (assoc var configs :test 'equal)))
+    (or (and val (html-encode (cdr val))) var)))
+
+(defvar *adhoc-template-formatters* '(("=" . default-eval-variable)
+				      ("h" . eval-variable-with-html-encode)))
 
 (defun choose-formatter (function-id)
   (let ((fn-pair (assoc function-id *adhoc-template-formatters* :test 'string=)))

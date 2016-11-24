@@ -38,7 +38,16 @@ one\ttwo\tthree
     (unless (string= expected-result (adhoc-template:convert-tsv template tsv))
       (message-box (concat "NOT EXPECTED RESULT: " (adhoc-template:convert-tsv template tsv))))))
 
+(defun test-eval-variable-with-html-encode ()
+  (let* ((template "string without tag: <%h not_html %>")
+	(configs "html:\t<html>\nnot_html:\t2 > 1")
+	(result (adhoc-template:convert template configs))
+	(expected-result "string without tag: 2 &gt; 1"))
+    (unless (equalp  result expected-result)
+      (message-box (concat "test for eval-variable-with-html-encode failed:\n" result)))))
+
 (test-adhoc-template-convert)
 (test-misc-utils-tsv-to-alists)
 (test-misc-utils-read-lines-from)
 (test-adhoc-template-convert-tsv)
+(test-eval-variable-with-html-encode)
