@@ -13,6 +13,7 @@
 	  read-lines-from
 	  tsv-to-alists
 	  html-encode
+	  html-decode
 	  read-content-of-files-in-directory))
 
 (defun emptyp (arg)
@@ -121,6 +122,15 @@
 		    ("'" . "&apos;")))
 	(entity-re "\\([&<>\"']\\)"))
     (convert-match str entities entity-re)))
+
+(defun html-decode (str)
+  (let ((entity-char-table '(("&amp;" . "&")
+			     ("&gt;" . ">")
+			     ("&lt;" . "<")
+			     ("&quot;" . "\"")
+			     ("&apos;" . "'")))
+	(entity-re "&\\(amp\\|gt\\|lt\\|quot\\|apos\\);"))
+    (convert-match str entity-char-table entity-re)))
 
 (defun read-content-of-files-in-directory (directory-path &optional (file-pat nil))
   (labels ((keep-matching-files (files)
