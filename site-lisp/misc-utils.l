@@ -12,6 +12,7 @@
 	  with-input-from
 	  read-lines-from
 	  tsv-to-alists
+	  html-encode
 	  read-content-of-files-in-directory))
 
 (defun emptyp (arg)
@@ -101,6 +102,22 @@
     (mapcar #'(lambda (line)
 		(mapcar #'cons field-names (split-string line #\tab t)))
 	    (cdr lines))))
+
+(defun html-encode (str)
+  (let ((entities '(("&" . "&amp;")
+		    (">" . "&gt;")
+		    ("<" . "&lt;")
+		    ("\"" . "&quot;")
+		    ("'" . "&apos;")))
+	(entity-re "\\([&<>\"']\\)"))
+    (labels ((char-to-entity (chr)
+	       (cdr (assoc chr entities :test 'equal))))
+      (do ((result "" (concat result
+			      (substring str prev-pos (match-beginning 0))
+			      (char-to-entity (match-string 0))))
+	   (prev-pos 0 (match-end 0)))
+	  ((null (string-match entity-re str prev-pos))
+	   (concat result (substring str prev-pos)))))))
 
 (defun read-content-of-files-in-directory (directory-path &optional (file-pat nil))
   (labels ((keep-matching-files (files)
