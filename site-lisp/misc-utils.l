@@ -14,6 +14,7 @@
 	  tsv-to-alists
 	  html-encode
 	  html-decode
+	  read-into-from-buffer-or-file
 	  read-content-of-files-in-directory))
 
 (defun emptyp (arg)
@@ -88,6 +89,16 @@
       (convert-encoding-to-internal
        (or (detect-char-encoding file-content) *encoding-utf8n*)
 				    file-content))))
+
+(defun read-into-from-buffer-or-file (name)
+  (let ((buffer (find-if #'(lambda (buffer)
+			     (string= (buffer-name buffer) name))
+			 (buffer-list))))
+    (if buffer
+	(save-excursion
+	  (set-buffer buffer)
+	  (buffer-substring (point-min) (point-max)))
+      (file-to-string name))))
 
 (defun read-lines-from (input)
   (labels ((read-lines (in)
