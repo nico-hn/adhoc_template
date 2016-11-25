@@ -98,7 +98,8 @@
 	(save-excursion
 	  (set-buffer buffer)
 	  (buffer-substring (point-min) (point-max)))
-      (file-to-string name))))
+      (if (file-exist-p name)
+	  (file-to-string name)))))
 
 (defun read-lines-from (input)
   (labels ((read-lines (in)
