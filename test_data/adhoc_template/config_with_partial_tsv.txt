@@ -1,0 +1,4 @@
+main_var1: main_val1
+main_var2: main_val2
+partial: partial_template.txt
+partial>: partial_config.tsv

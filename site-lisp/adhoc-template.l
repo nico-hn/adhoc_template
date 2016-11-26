@@ -129,11 +129,16 @@
 	     (let ((config (assoc name configs :test 'equal)))
 	       (and config (cdr config))))
 	   (read-content (content-name)
-	     (and content-name (read-into-from-buffer-or-file content-name))))
+	     (and content-name (read-into-from-buffer-or-file content-name)))
+	   (choose-converter (configs-name)
+	     (if (and configs-name (string-match "\.\\(tsv\\|TSV\\)$" configs-name))
+		 #'convert-tsv
+	       #'convert)))
     (let ((template-name (find-value var))
 	  (configs-name (find-value (concat var ">"))))
       (if template-name
-	  (convert (or (read-content template-name) template-name)
+	  (funcall (choose-converter configs-name)
+		   (or (read-content template-name) template-name)
 		   (or (read-content configs-name) configs))
 	var))))
 
