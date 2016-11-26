@@ -1,0 +1,7 @@
+#template_with_partial
+
+## <%= main_var1 %>
+
+<%> partial %>
+
+## <%= main_var2 %>

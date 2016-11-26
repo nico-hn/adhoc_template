@@ -124,8 +124,22 @@
   (let ((val (assoc var configs :test 'equal)))
     (or (and val (html-encode (cdr val))) var)))
 
+(defun eval-partial-template (var configs)
+  (labels ((find-value (name)
+	     (let ((config (assoc name configs :test 'equal)))
+	       (and config (cdr config))))
+	   (read-content (content-name)
+	     (and content-name (read-into-from-buffer-or-file content-name))))
+    (let ((template-name (find-value var))
+	  (configs-name (find-value (concat var ">"))))
+      (if template-name
+	  (convert (or (read-content template-name) template-name)
+		   (or (read-content configs-name) configs))
+	var))))
+
 (defvar *adhoc-template-formatters* '(("=" . default-eval-variable)
-				      ("h" . eval-variable-with-html-encode)))
+				      ("h" . eval-variable-with-html-encode)
+				      (">" . eval-partial-template)))
 
 (defun choose-formatter (function-id)
   (let ((fn-pair (assoc function-id *adhoc-template-formatters* :test 'string=)))

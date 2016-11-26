@@ -1,0 +1,2 @@
+in_partial_var1: in_partial_val1
+in_partial_val2: in_partial_val2

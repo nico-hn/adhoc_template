@@ -1,0 +1,3 @@
+  * <%= in_partial_var1 %>
+  * <%= in_partial_var2 %>
+
