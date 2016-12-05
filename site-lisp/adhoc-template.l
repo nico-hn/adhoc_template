@@ -9,6 +9,7 @@
 	  format-tree
 	  convert
 	  convert-tsv
+	  eval-current-buffer-as-config
 	  *adhoc-template-formatters*))
 
 (defun read-config-block (block-head in)
@@ -181,3 +182,17 @@
     (join-string (mapcar #'(lambda (tsv-record)
 			     (format-tree template tsv-record))
 			 tsv-records))))
+
+(defun eval-current-buffer-as-config ()
+  (interactive)
+  (labels ((choose-template ()
+	     (if (y-or-n-p "Read template from buffer? ")
+		 (buffer-name (read-buffer-name "Template buffer name: "))
+	       (read-file-name "Template file name: ")))
+	   (tsv-data? ()
+	     (string-match "\.\\(tsv\\|TSV\\)$" (buffer-name (selected-buffer)))))
+    (let ((config-data (buffer-substring (point-min) (point-max)))
+	  (template-data (read-into-from-buffer-or-file (choose-template)))
+	  (converter (or (and (tsv-data?) #'convert-tsv) #'convert)))
+      (with-output-to-temp-buffer ("*adhoc-template: result*")
+	(insert (funcall converter template-data config-data))))))
