@@ -9,6 +9,7 @@
 	  re-split-string
 	  integer-to-string
 	  file-to-string
+	  buffer-to-string
 	  with-input-from
 	  read-lines-from
 	  tsv-to-alists
@@ -90,14 +91,17 @@
        (or (detect-char-encoding file-content) *encoding-utf8n*)
 				    file-content))))
 
+(defun buffer-to-string (&optional (buffer (selected-buffer)))
+  (save-excursion
+    (set-buffer buffer)
+    (buffer-substring (point-min) (point-max))))
+
 (defun read-into-from-buffer-or-file (name)
   (let ((buffer (find-if #'(lambda (buffer)
 			     (string= (buffer-name buffer) name))
 			 (buffer-list))))
     (if buffer
-	(save-excursion
-	  (set-buffer buffer)
-	  (buffer-substring (point-min) (point-max)))
+	(buffer-to-string buffer)
       (if (file-exist-p name)
 	  (file-to-string name)))))
 

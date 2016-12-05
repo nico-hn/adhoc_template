@@ -191,7 +191,7 @@
 	       (read-file-name "Template file name: ")))
 	   (tsv-data? ()
 	     (string-match "\.\\(tsv\\|TSV\\)$" (buffer-name (selected-buffer)))))
-    (let ((config-data (buffer-substring (point-min) (point-max)))
+    (let ((config-data (buffer-to-string))
 	  (template-data (read-into-from-buffer-or-file (choose-template)))
 	  (converter (or (and (tsv-data?) #'convert-tsv) #'convert)))
       (with-output-to-temp-buffer ("*adhoc-template: result*")
